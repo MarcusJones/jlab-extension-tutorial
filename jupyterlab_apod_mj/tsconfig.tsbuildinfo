@@ -734,8 +734,8 @@
         "signature": "7a7e8dec050f4ad9d6b093812a3a203acb13a32364079db20f7a6fde38f8427c"
       },
       "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/src/index.ts": {
-        "version": "69e31777adf9ad725ee511a392c014e5e3b2a60ab16fa693f4a0b124978b9082",
-        "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+        "version": "efa7ea9d6161e26e23ebdaf2b52291a48b0641844455cad4b332f30fe5e60206",
+        "signature": "cf1268bd847a4efd13eb21c9dab3c766d2216629a7e0697307e7bccdda28f577"
       }
     },
     "options": {
@@ -2389,6 +2389,9 @@
         "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/shell.d.ts",
         "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/status.d.ts",
         "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/tokens.d.ts"
+      ],
+      "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/src/index.ts": [
+        "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -2574,7 +2577,8 @@
       "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/layoutrestorer.d.ts",
       "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/mimerenderers.d.ts",
       "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/router.d.ts",
-      "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/index.d.ts"
+      "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/node_modules/@jupyterlab/application/lib/index.d.ts",
+      "/home/batman/xprize/jlab-extension-tutorial/jupyterlab_apod_mj/src/index.ts"
     ]
   },
   "version": "3.5.3"

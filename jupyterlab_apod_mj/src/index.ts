@@ -34,7 +34,7 @@ const extension: JupyterFrontEndPlugin<void> = {
     // Build the MainAreaWidget
     const content = new Widget();
     content.addClass('my-apodWidget');
-    const widget = new MainAreaWidget({content});
+    const widget = new MainAreaWidget({ content });
     widget.id = 'apod-jupyterlab-mj';
     widget.title.label = 'Astronomy pic';
     widget.title.closable = true;
@@ -47,10 +47,10 @@ const extension: JupyterFrontEndPlugin<void> = {
     content.node.appendChild(summary);
 
     // Random date
-    function randomDate(){
+    function randomDate() {
       const start = new Date(2010, 1, 1);
       const end = new Date();
-      const randomDate = new Date(start.getTime() + Math.random()*(end.getTime() - start.getTime()));
+      const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
       return randomDate.toISOString().slice(0, 10);
     }
 
@@ -78,23 +78,24 @@ const extension: JupyterFrontEndPlugin<void> = {
         console.log('Random APOD not a picture');
       }
 
-    // Add an app command
-    const command: string = 'apod:open';
-    app.commands.addCommand(command, {
-      label: 'Random Astro Pic',
-      execute: () => {
-        if (!widget.isAttached) {
-          // Attach it to main work area
-          app.shell.add(widget, 'main');
+      // Add an app command
+      const command: string = 'apod:open';
+      app.commands.addCommand(command, {
+        label: 'Random Astro Pic',
+        execute: () => {
+          if (!widget.isAttached) {
+            // Attach it to main work area
+            app.shell.add(widget, 'main');
+          }
+          // Activate the widget
+          app.shell.activateById(widget.id);
         }
-        // Activate the widget
-        app.shell.activateById(widget.id);
-      }
-    })
+      })
 
-    console.log('ICommandPalette:', palette);
-    palette.addItem({command, category: 'Tutorial'});
+      console.log('ICommandPalette:', palette);
+      palette.addItem({ command, category: 'Tutorial' });
+    }
   }
-};
+}
 
 export default extension;
