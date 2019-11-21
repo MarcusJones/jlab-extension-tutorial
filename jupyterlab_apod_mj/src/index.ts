@@ -33,6 +33,7 @@ const extension: JupyterFrontEndPlugin<void> = {
 
     // Build the MainAreaWidget
     const content = new Widget();
+    content.addClass('my-apodWidget');
     const widget = new MainAreaWidget({content});
     widget.id = 'apod-jupyterlab-mj';
     widget.title.label = 'Astronomy pic';
@@ -41,6 +42,9 @@ const extension: JupyterFrontEndPlugin<void> = {
     // Add image
     let img = document.createElement('img');
     content.node.appendChild(img);
+
+    let summary = document.createElement('p');
+    content.node.appendChild(summary);
 
     // Random date
     function randomDate(){
@@ -52,15 +56,27 @@ const extension: JupyterFrontEndPlugin<void> = {
 
     // Get information about picture
     const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${randomDate()}`);
-    const data = await response.json() as APODResponse;
-
-    if (data.media_type === 'image') {
-      // Populate the image
-      img.src = data.url;
-      img.title = data.title;
+    if (!response.ok) {
+      const data = await response.json();
+      if (data.error) {
+        summary.innerText = data.error.message;
+      } else {
+        summary.innerText = response.statusText;
+      }
     } else {
-      console.log('Random APOD not a picture');
-    }
+      const data = await response.json() as APODResponse;
+
+      if (data.media_type === 'image') {
+        // Populate the image
+        img.src = data.url;
+        img.title = data.title;
+        summary.innerText = data.title;
+        if (data.copyright) {
+          summary.innerText += ` (Copyright ${data.copyright})`
+        }
+      } else {
+        console.log('Random APOD not a picture');
+      }
 
     // Add an app command
     const command: string = 'apod:open';
