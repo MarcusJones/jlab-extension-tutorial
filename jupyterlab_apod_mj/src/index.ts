@@ -1,19 +1,19 @@
 import {
-  JupyterFrontEnd, JupyterFrontEndPlugin
+  ILayoutRestorer, JupyterFrontEnd, JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
 import {
-  ICommandPalette, MainAreaWidget
+  ICommandPalette, MainAreaWidget, WidgetTracker
 } from '@jupyterlab/apputils';
+
+import {
+  Message
+} from '@phosphor/messaging';
 
 import {
   Widget,
   // PanelLayout
 } from '@phosphor/widgets';
-
-import {
-  Message
-} from '@phosphor/messaging';
 
 interface APODResponse {
   copyright: string;
@@ -83,17 +83,54 @@ class APODWidget extends Widget {
 
 }
 
-function activate(app: JupyterFrontEnd, palette: ICommandPalette) {
+function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer) {
 
   console.log('JupyterLab extension jupyterlab_apod_mj is activated!');
 
-  // Build the widget
-  const content = new APODWidget();
-  content.addClass('my-apodWidget');
-  const widget = new MainAreaWidget({ content });
-  widget.id = 'apod-jupyterlab-mj';
-  widget.title.label = 'Astronomy pic';
-  widget.title.closable = true;
+  // Declare the widget
+  let widget: MainAreaWidget<APODWidget>;
+
+  // Add an application command
+  const command: string = 'apod:open';
+  app.commands.addCommand(command, {
+    label: 'Random Astro Pic',
+    execute: () => {
+      if (!widget) {
+        // Create widget if none exists
+        const content = new APODWidget();
+        content.addClass('my-apodWidget');
+
+        widget = new MainAreaWidget({ content });
+        widget.id = 'apod-jupyterlab-mj';
+        widget.title.label = 'Astronomy pic';
+        widget.title.closable = true;
+      }
+      if (!tracker.has(widget)) {
+        tracker.add(widget);
+      }
+      if (!widget.isAttached) {
+        // Attach it to main work area
+        app.shell.add(widget, 'main');
+      }
+      widget.content.update();
+
+      // Activate the widget
+      app.shell.activateById(widget.id);
+    }
+  });
+
+  // Add the command to the palette
+  palette.addItem({ command, category: 'Tutorial' });
+
+
+  let tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
+    namespace: 'apod'
+  });
+
+  restorer.restore(tracker, {
+    command,
+    name: ()=>'apod'
+  })
 
   // Add image
   // let img = document.createElement('img');
@@ -103,22 +140,7 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette) {
   // content.node.appendChild(summary);
 
   // Add an app command
-  const command: string = 'apod:open';
-  app.commands.addCommand(command, {
-    label: 'Random Astro Pic',
-    execute: () => {
-      if (!widget.isAttached) {
-        // Attach it to main work area
-        app.shell.add(widget, 'main');
-      }
-      content.update();
-      // Activate the widget
-      app.shell.activateById(widget.id);
-    }
-  })
-
   // console.log('ICommandPalette:', palette);
-  palette.addItem({ command, category: 'Tutorial' });
 }
 
 /**
@@ -127,7 +149,7 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette) {
 const extension: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab_apod_mj',
   autoStart: true,
-  requires: [ICommandPalette],
+  requires: [ICommandPalette, ILayoutRestorer],
   activate: activate
 }
 
