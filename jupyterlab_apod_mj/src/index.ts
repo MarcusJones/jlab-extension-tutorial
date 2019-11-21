@@ -40,13 +40,19 @@ class APODWidget extends Widget {
     // Add a summary element
     this.summary = document.createElement('p');
     this.node.appendChild(this.summary);
+
+    console.log('Built APODWidget class, inheriting from Widget class');
   }
 
   readonly img: HTMLImageElement;
   readonly summary: HTMLParagraphElement;
 
   async onUpdateRequest(msg: Message): Promise<void> {
+    console.log('Call: WPODWidget.onUpdateRequest');
+
     // Get information about picture
+    console.log('\tfetching image...');
+
     const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${this.randomDate()}`);
     if (!response.ok) {
       const data = await response.json();
@@ -58,6 +64,7 @@ class APODWidget extends Widget {
       }
     }
 
+    console.log('\tresponse ok, getting data');
     const data = await response.json() as APODResponse;
 
     if (data.media_type === 'image') {
@@ -84,6 +91,7 @@ class APODWidget extends Widget {
 }
 
 function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer) {
+  console.log('Calling activate()');
 
   console.log('JupyterLab extension jupyterlab_apod_mj is activated!');
 
@@ -98,7 +106,6 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
       if (!widget) {
         // Create widget if none exists
         const content = new APODWidget();
-        content.addClass('my-apodWidget');
 
         widget = new MainAreaWidget({ content });
         widget.id = 'apod-jupyterlab-mj';
@@ -129,18 +136,8 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
 
   restorer.restore(tracker, {
     command,
-    name: ()=>'apod'
-  })
-
-  // Add image
-  // let img = document.createElement('img');
-  // content.node.appendChild(img);
-
-  // let summary = document.createElement('p');
-  // content.node.appendChild(summary);
-
-  // Add an app command
-  // console.log('ICommandPalette:', palette);
+    name: () => 'apod'
+  });
 }
 
 /**
